@@ -5,6 +5,9 @@ on:
     branches:
       - '**'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -40,6 +43,7 @@ jobs:
           make_latest: true
           files: |
             bin/Release/net9.0-windows/win-x64/publish/QueryMasterTester.exe
+          token: ${{ secrets.GITHUB_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

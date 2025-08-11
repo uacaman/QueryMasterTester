@@ -7,14 +7,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <IsPackable>true</IsPackable>
-    <PackageId>QueryMasterTester</PackageId>
-    <Authors>QueryMasterTester Authors</Authors>
-    <Company></Company>
-    <Description>Windows app that queries Source-style game servers and shows Info, Players, and Rules.</Description>
-    <RepositoryUrl>https://github.com/${RepositoryOwner}/${RepositoryName}</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/${RepositoryOwner}/${RepositoryName}</PackageProjectUrl>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
