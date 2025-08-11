@@ -29,11 +29,6 @@ jobs:
           name: QueryMasterTester-win-x64
           path: bin/Release/net9.0-windows/win-x64/publish/**
 
-      - name: Pack NuGet
-        run: dotnet pack QueryMasterTester.csproj -c Release -o out /p:PackageVersion=${{ github.run_number }}
-
-      - name: Publish to GitHub Packages
-        run: dotnet nuget push out/*.nupkg --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
 
       - name: Create GitHub Release with EXE
         uses: softprops/action-gh-release@v2
