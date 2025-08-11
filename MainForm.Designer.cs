@@ -33,6 +33,7 @@
             btnCancel = new Button();
             lblStatus = new Label();
             lnkHelp = new LinkLabel();
+            lnkGithub = new LinkLabel();
             gridPlayers = new DataGridView();
             colPlayer = new DataGridViewTextBoxColumn();
             colScore = new DataGridViewTextBoxColumn();
@@ -104,6 +105,17 @@
             lnkHelp.TabStop = true;
             lnkHelp.Text = "Help";
             lnkHelp.LinkClicked += lnkHelp_LinkClicked;
+            // 
+            // lnkGithub
+            // 
+            lnkGithub.AutoSize = true;
+            lnkGithub.Location = new Point(530, 16);
+            lnkGithub.Name = "lnkGithub";
+            lnkGithub.Size = new Size(90, 15);
+            lnkGithub.TabIndex = 13;
+            lnkGithub.TabStop = true;
+            lnkGithub.Text = "View on GitHub";
+            lnkGithub.LinkClicked += lnkGithub_LinkClicked;
             // 
             // gridPlayers
             // 
@@ -259,6 +271,7 @@
             Controls.Add(btnSearch);
             Controls.Add(lnkHelp);
             Controls.Add(btnCancel);
+            Controls.Add(lnkGithub);
             Controls.Add(txtAddress);
             Name = "Form1";
             Text = "QueryMaster Tester - Server Query (Non-Commercial, Use at Your Own Risk)";
@@ -279,6 +292,7 @@
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.LinkLabel lnkHelp;
+        private System.Windows.Forms.LinkLabel lnkGithub;
         private System.Windows.Forms.DataGridView gridPlayers;
         private System.Windows.Forms.DataGridViewTextBoxColumn colPlayer;
         private System.Windows.Forms.DataGridViewTextBoxColumn colScore;

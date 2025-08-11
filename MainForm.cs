@@ -134,5 +134,24 @@ namespace QueryMasterTester
                           "4) Click Cancel to stop a long request.";
             MessageBox.Show(this, message, "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        private void lnkGithub_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                var url = "https://github.com/uacaman/QueryMasterTester";
+                using var ps = new System.Diagnostics.Process();
+                ps.StartInfo = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                };
+                ps.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "Open URL Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
