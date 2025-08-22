@@ -49,6 +49,9 @@
             colRuleKey = new DataGridViewTextBoxColumn();
             colRuleValue = new DataGridViewTextBoxColumn();
             colRuleChange = new DataGridViewTextBoxColumn();
+            groupBackend = new GroupBox();
+            rdoOpenGSQ = new RadioButton();
+            rdoQueryMaster = new RadioButton();
             ((System.ComponentModel.ISupportInitialize)gridPlayers).BeginInit();
             tabControl.SuspendLayout();
             tabInfo.SuspendLayout();
@@ -56,6 +59,7 @@
             tabPlayers.SuspendLayout();
             tabRules.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gridRules).BeginInit();
+            groupBackend.SuspendLayout();
             SuspendLayout();
             // 
             // txtAddress
@@ -116,6 +120,40 @@
             lnkGithub.TabStop = true;
             lnkGithub.Text = "View on GitHub";
             lnkGithub.LinkClicked += lnkGithub_LinkClicked;
+            // 
+            // groupBackend
+            // 
+            groupBackend.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            groupBackend.Controls.Add(rdoQueryMaster);
+            groupBackend.Controls.Add(rdoOpenGSQ);
+            groupBackend.Location = new Point(626, 3);
+            groupBackend.Name = "groupBackend";
+            groupBackend.Size = new Size(162, 63);
+            groupBackend.TabIndex = 14;
+            groupBackend.TabStop = false;
+            groupBackend.Text = "Backend";
+            // 
+            // rdoOpenGSQ
+            // 
+            rdoOpenGSQ.AutoSize = true;
+            rdoOpenGSQ.Checked = true;
+            rdoOpenGSQ.Location = new Point(10, 19);
+            rdoOpenGSQ.Name = "rdoOpenGSQ";
+            rdoOpenGSQ.Size = new Size(76, 19);
+            rdoOpenGSQ.TabIndex = 0;
+            rdoOpenGSQ.TabStop = true;
+            rdoOpenGSQ.Text = "OpenGSQ";
+            rdoOpenGSQ.UseVisualStyleBackColor = true;
+            // 
+            // rdoQueryMaster
+            // 
+            rdoQueryMaster.AutoSize = true;
+            rdoQueryMaster.Location = new Point(10, 40);
+            rdoQueryMaster.Name = "rdoQueryMaster";
+            rdoQueryMaster.Size = new Size(96, 19);
+            rdoQueryMaster.TabIndex = 1;
+            rdoQueryMaster.Text = "QueryMaster";
+            rdoQueryMaster.UseVisualStyleBackColor = true;
             // 
             // gridPlayers
             // 
@@ -271,6 +309,7 @@
             Controls.Add(btnSearch);
             Controls.Add(lnkHelp);
             Controls.Add(btnCancel);
+            Controls.Add(groupBackend);
             Controls.Add(lnkGithub);
             Controls.Add(txtAddress);
             Name = "Form1";
@@ -282,6 +321,8 @@
             tabPlayers.ResumeLayout(false);
             tabRules.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)gridRules).EndInit();
+            groupBackend.ResumeLayout(false);
+            groupBackend.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -309,5 +350,8 @@
         private System.Windows.Forms.DataGridView gridInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colInfoKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn colInfoValue;
+        private System.Windows.Forms.GroupBox groupBackend;
+        private System.Windows.Forms.RadioButton rdoOpenGSQ;
+        private System.Windows.Forms.RadioButton rdoQueryMaster;
     }
 }

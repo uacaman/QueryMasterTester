@@ -1,10 +1,19 @@
 ﻿using System.Diagnostics;
+using System.Linq;
+using QueryMaster;
+
 
 namespace QueryMasterTester
 {
+    public enum QueryBackend
+    {
+        OpenGSQ,
+        QueryMaster
+    }
+
     public static class QueryService
     {
-        public static async Task<Server> ProcessAsync(string addr, int appId)
+        public static async Task<Server> ProcessAsync(string addr, int appId, QueryBackend backend = QueryBackend.OpenGSQ)
         {
             if (string.IsNullOrWhiteSpace(addr) || addr.IndexOf(":", StringComparison.Ordinal) == -1)
             {
@@ -23,56 +32,102 @@ namespace QueryMasterTester
                 var ip = rAddr[0];
                 var port = int.Parse(rAddr[1]);
 
-                var source = new OpenGSQ.Protocols.Source(ip, port, 10000);
+                string name = string.Empty;
+                int playersCount = 0;
+                int maxPlayers = 0;
+                int bots = 0;
+                string map = string.Empty;
+                bool secure = false;
+                bool dedicated = false;
+                string os = string.Empty;
+                Dictionary<string, string>? rules = null;
+                List<PlayerInfo> playerList = new();
 
-                var info = await source.GetInfo();
-                var rules = await source.GetRules();
-
-                var server = new Server
+                if (backend == QueryBackend.OpenGSQ)
                 {
-                    Addr = addr,
-                    Gameport = port,
-                    Name = info.Name,
-                    AppId = appId,
-                    Players = info.Players,
-                    MaxPlayers = info.MaxPlayers,
-                    Bots = info.Bots,
-                    Map = info.Map,
-                    Secure = info.VAC == OpenGSQ.Responses.Source.VAC.Secured,
-                    Dedicated = info.ServerType == OpenGSQ.Responses.Source.ServerType.Dedicated,
-                    Os = info.Environment switch
+                    var source = new OpenGSQ.Protocols.Source(ip, port, 30000);
+                    var info = await source.GetInfo();
+                    var rulesResp = await source.GetRules();
+                    name = info.Name;
+                    playersCount = info.Players;
+                    maxPlayers = info.MaxPlayers;
+                    bots = info.Bots;
+                    map = info.Map;
+                    secure = info.VAC == OpenGSQ.Responses.Source.VAC.Secured;
+                    dedicated = info.ServerType == OpenGSQ.Responses.Source.ServerType.Dedicated;
+                    os = info.Environment switch
                     {
                         OpenGSQ.Responses.Source.Environment.Linux => "linux",
                         OpenGSQ.Responses.Source.Environment.Windows => "windows",
                         OpenGSQ.Responses.Source.Environment.Mac => "mac",
                         _ => string.Empty
-                    },
+                    };
+                    if (rulesResp is not null) rules = new Dictionary<string, string>(rulesResp);
+                    try
+                    {
+                        var players = await source.GetPlayers();
+                        if (players is not null)
+                        {
+                            foreach (var p in players)
+                            {
+                                playerList.Add(new PlayerInfo { Name = p.Name, Score = p.Score, DurationSeconds = (int)Math.Round(p.Duration) });
+                            }
+                        }
+                    }
+                    catch { }
+                }
+                else
+                {
+                    var serverQM = QueryMaster.ServerQuery.GetServerInstance(QueryMaster.EngineType.Source, ip, (ushort)port);
+                    var info = serverQM.GetInfo();
+                    name = info.Name;
+                    playersCount = info.Players;
+                    maxPlayers = info.MaxPlayers;
+                    bots = info.Bots;
+                    map = info.Map;
+                    secure = info.IsSecure;
+                    //dedicated = info.ServerType;
+                    //os = info.Os == QueryMaster.GameServer.OperatingSystem.Windows ? "windows" : info.Os == QueryMaster.GameServer.OperatingSystem.Linux ? "linux" : string.Empty;
+                    try
+                    {
+                        var rulesResp = serverQM.GetRules();
+                        //rules = rulesResp?.ToDictionary(kv => kv.Key, kv => kv.Value);
+                    }
+                    catch { }
+                    try
+                    {
+                        var players = serverQM.GetPlayers();
+                        if (players != null)
+                        {
+                            //foreach (var p in players)
+                            //{
+                            //    playerList.Add(new PlayerInfo { Name = p.Name, Score = p.Score, DurationSeconds = (int)Math.Round(p.Time) });
+                            //}
+                        }
+                    }
+                    catch { }
+                }
+
+                var server = new Server
+                {
+                    Addr = addr,
+                    Gameport = port,
+                    Name = name,
+                    AppId = appId,
+                    Players = playersCount,
+                    MaxPlayers = maxPlayers,
+                    Bots = bots,
+                    Map = map,
+                    Secure = secure,
+                    Dedicated = dedicated,
+                    Os = os,
                     CreatedAt = DateTime.UtcNow,
                 };
                 if (rules is not null)
                 {
                     server.Rules = new Dictionary<string, string>(rules);
                 }
-
-                try
-                {
-                    var players = await source.GetPlayers();
-                    if (players is not null)
-                    {
-                        foreach (var p in players)
-                        {
-                            server.PlayerList.Add(new PlayerInfo
-                            {
-                                Name = p.Name,
-                                Score = p.Score,
-                                DurationSeconds = (int)Math.Round(p.Duration)
-                            });
-                        }
-                    }
-                }
-                catch
-                {
-                }
+                server.PlayerList = playerList;
 
                 server.Online = true;
                 return server;

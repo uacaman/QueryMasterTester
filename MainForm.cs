@@ -33,7 +33,8 @@ namespace QueryMasterTester
                 gridRules.Rows.Clear();
                 gridInfo.Rows.Clear();
 
-                var server = await QueryService.ProcessAsync(addr, appId: 0);
+                var backend = rdoQueryMaster.Checked ? QueryBackend.QueryMaster : QueryBackend.OpenGSQ;
+                var server = await QueryService.ProcessAsync(addr, appId: 0, backend);
 
                 if (ctsLocal.IsCancellationRequested || _cts != ctsLocal)
                 {

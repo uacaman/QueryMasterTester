@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="OpenGSQ" Version="2.1.5" />
+    <PackageReference Include="QueryMasterRedux" Version="1.0.1" />
   </ItemGroup>
 
 </Project>
